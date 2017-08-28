@@ -1,20 +1,7 @@
 
-/*  You’ll need:
-   - Blynk App (download from AppStore or Google Play)
-   - ESP8266 board
-   - Decide how to connect to Blynk
-     (USB, Ethernet, Wi-Fi, Bluetooth, ...)
-
-  There is a bunch of great example sketches included to show you how to get
-  started. Think of them as LEGO bricks  and combine them as you wish.
-  For example, take the Ethernet Shield sketch and combine it with the
-  Servo example, or choose a USB sketch and add a code from SendData
-  example.
+/*  AUTHOR: Yeray Betancor Caro
  *************************************************************/
-
-/* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
-
 
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
@@ -27,12 +14,12 @@ char ssid[] = "NETLLAR_63B136";
 char pass[] = "60191748";
 
 //Variables del programa
-const int vPins[5] = {V0, V1, V2, V3, V4};
+const int vPins[5] = {V0, V1, V2, V3, V4}; //Asignacion pines botones
 const int channelPins[4] = {5, 4, 2, 0}; //Numero asignacion de Pines
 const int displayPins[4] = {V5, V6, V7, V8}; //Numero asignacion de Pines
 
 int channelRemaining[4] = {0, 0, 0, 0}; //Tiempo restante
-int channelMode[4]  = {0, 0, 0, 0}; // 0 OFF, 1 SECUENCIAL, 2 MANUAL
+int channelMode[4]  = {0, 0, 0, 0}; // 0 OFF, 1 SECUENCIAL, 2 SIMULTANEO, 3 MANUAL
 int timeSlider = 0;
 int modeSimultaneo = 0;
 
@@ -137,7 +124,7 @@ BLYNK_WRITE(V13) //Selector de tiempo
   timeSlider = param.asInt();
 }
 
-BLYNK_WRITE(V14) //Selector de tiempo
+BLYNK_WRITE(V14) //Selector de Simultaneo
 {
   modeSimultaneo = param.asInt();
 }
