@@ -1,6 +1,10 @@
 
 /*  AUTHOR: Yeray Betancor Caro
+
+  Microcontrolador wifi ESP8266
+  
  *************************************************************/
+
 #define BLYNK_PRINT Serial
 
 #include <ESP8266WiFi.h>
@@ -14,12 +18,12 @@ char ssid[] = "NETLLAR_63B136";
 char pass[] = "60191748";
 
 //Variables del programa
-const int vPins[5] = {V0, V1, V2, V3, V4}; //Asignacion pines botones
+const int vPins[5] = {V0, V1, V2, V3, V4};
 const int channelPins[4] = {5, 4, 2, 0}; //Numero asignacion de Pines
 const int displayPins[4] = {V5, V6, V7, V8}; //Numero asignacion de Pines
 
 int channelRemaining[4] = {0, 0, 0, 0}; //Tiempo restante
-int channelMode[4]  = {0, 0, 0, 0}; // 0 OFF, 1 SECUENCIAL, 2 SIMULTANEO, 3 MANUAL
+int channelMode[4]  = {0, 0, 0, 0}; // 0 OFF, 1 SECUENCIAL, 2 MANUAL
 int timeSlider = 0;
 int modeSimultaneo = 0;
 
@@ -41,11 +45,11 @@ void loop()
   Blynk.run();
   timer.run();
 }
-void heartBeat1(){
+void heartBeat1() {
   Serial.println("Hola");
-  }
+}
 void heartBeat() {
-exit;
+  exit;
   if (Blynk.connected()) {
     bool leastOne = false;
     for (int i = 0; i < 4; i++) {
@@ -69,29 +73,29 @@ exit;
           break;
         case SIMULTANEO:
           Serial.println("Canal " + String(i) + " SIMULTANEO");
-          channelRemaining[i]--;
-          //ACTIVAR
-          if ((channelRemaining[i] + 1) % 60 != 0) {
-            break;
-          }
-          Blynk.setProperty(displayPins[i], "color", "#4CAF50");
-          Blynk.virtualWrite(displayPins[i], channelRemaining[i] / 60);
 
+          //ACTIVAR
+          if ((channelRemaining[i]) % 60 == 0) {
+            Blynk.setProperty(displayPins[i], "color", "#4CAF50");
+            Blynk.virtualWrite(displayPins[i], channelRemaining[i] / 60);
+          }
+          channelRemaining[i]--;
           break;
         case SECUENCIAL:
           Serial.print("Canal " + String(i) + " SECUENCIAL ");
           if (!leastOne) {
             Serial.println("ACTIVO");
-            channelRemaining[i]--;
+
             leastOne = true;
             //ACTIVAR
-            if ((channelRemaining[i] + 1) % 60 != 0) {
-              break;
+            if ((channelRemaining[i]) % 60 == 0) {
+
+
+              Blynk.setProperty(displayPins[i], "color", "#4CAF50");
+              Blynk.virtualWrite(displayPins[i], channelRemaining[i] / 60);
+
             }
-            Blynk.setProperty(displayPins[i], "color", "#4CAF50");
-            Blynk.virtualWrite(displayPins[i], channelRemaining[i] / 60);
-
-
+            channelRemaining[i]--;
           } else {
 
             Serial.println("ESPERANDO");
@@ -124,7 +128,7 @@ BLYNK_WRITE(V13) //Selector de tiempo
   timeSlider = param.asInt();
 }
 
-BLYNK_WRITE(V14) //Selector de Simultaneo
+BLYNK_WRITE(V14) //Selector Simultaneo
 {
   modeSimultaneo = param.asInt();
 }
